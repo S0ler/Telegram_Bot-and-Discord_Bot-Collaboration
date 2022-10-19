@@ -39,7 +39,7 @@ class Program
     }
     private Task CommandsHandler(SocketMessage msg)
     {
-        if (!msg.Author.IsBot) // прием
+        if (!msg.Author.IsBot)
         {
             StringDiscord(msg.Author.Username + " : " + msg.Content);
 
@@ -54,12 +54,10 @@ class Program
     }
     async static Task Update(ITelegramBotClient BotClient, Update update, CancellationToken arg3)
     {
-
         var messange = update.Message;
 
-        if (messange.Text != null)// прием
+        if (messange.Text != null)
         {
-            //await BotClient.SendTextMessageAsync(messange.Chat.Id, Prog.StringTelegram(null));
             StringTelegram(messange.Text.ToString());
             Console.WriteLine(stringDis + "StringTelegram");
         }
@@ -68,7 +66,6 @@ class Program
             BotClient.SendTextMessageAsync(messange.Chat.Id, stringDis);
             BoolDis = false;
         }
-
     }
     async static Task Error(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3)
     {
@@ -87,7 +84,6 @@ class Program
     {
         if (str != null)
         {
-
             stringDis = str.Replace("<@1032157401358549036>", "");
             BoolDis = true;
             Console.WriteLine(str + " " + stringDis);
