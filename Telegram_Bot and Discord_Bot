@@ -1,0 +1,96 @@
+using Discord;
+using Discord.WebSocket;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Telegram.Bot;
+using Telegram.Bot.Types;
+class Program
+{
+    DiscordSocketClient client;
+    static void Main(string[] args)
+        => new Program().MainAsync().GetAwaiter().GetResult();
+
+    static string stringDis;
+    static bool BoolDis = false;
+    static string stringTel;
+    static bool BoolTel = false;
+
+    private async Task MainAsync()
+    {
+        var clientTelegram = new TelegramBotClient("5784604175:AAH_fx2f4pdGvuB5htzDC3ApR-asRQ-ph4I");
+        clientTelegram.StartReceiving(Update, Error);
+
+        client = new DiscordSocketClient();
+        client.MessageReceived += CommandsHandler;
+        client.Log += Log;
+
+        var token = "MTAzMjE1NzQwMTM1ODU0OTAzNg.GJltnB.VwKwGq5KCr2NA49BQl4MCZoBCmf6QGP0pOvxNE";
+
+        await client.LoginAsync(TokenType.Bot, token);
+        await client.StartAsync();
+
+        Console.ReadLine();
+    }
+    private Task Log(LogMessage msg)
+    {
+        Console.WriteLine(msg.ToString());
+        return Task.CompletedTask;
+    }
+    private Task CommandsHandler(SocketMessage msg)
+    {
+        if (!msg.Author.IsBot) // прием
+        {
+            StringDiscord(msg.Author.Username + " : " + msg.Content);
+
+            Console.WriteLine(stringTel + "StringDiscord");
+        }
+        if (BoolTel)
+        {
+            msg.Channel.SendMessageAsync(stringTel);
+            BoolTel = false;
+        }
+        return Task.CompletedTask;
+    }
+    async static Task Update(ITelegramBotClient BotClient, Update update, CancellationToken arg3)
+    {
+
+        var messange = update.Message;
+
+        if (messange.Text != null)// прием
+        {
+            //await BotClient.SendTextMessageAsync(messange.Chat.Id, Prog.StringTelegram(null));
+            StringTelegram(messange.Text.ToString());
+            Console.WriteLine(stringDis + "StringTelegram");
+        }
+        if (BoolDis)
+        {
+            BotClient.SendTextMessageAsync(messange.Chat.Id, stringDis);
+            BoolDis = false;
+        }
+
+    }
+    async static Task Error(ITelegramBotClient arg1, Exception arg2, CancellationToken arg3)
+    {
+        throw new NotImplementedException();
+    }
+    static void StringTelegram(string str)
+    {
+        if (str != null)
+        {
+            stringTel = str;
+            BoolTel = true;
+            Console.WriteLine(str + " " + stringTel);
+        }
+    }
+    static void StringDiscord(string str)
+    {
+        if (str != null)
+        {
+
+            stringDis = str.Replace("<@1032157401358549036>", "");
+            BoolDis = true;
+            Console.WriteLine(str + " " + stringDis);
+        }
+    }
+}
