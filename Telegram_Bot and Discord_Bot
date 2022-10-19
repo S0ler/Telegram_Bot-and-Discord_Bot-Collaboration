@@ -18,14 +18,14 @@ class Program
 
     private async Task MainAsync()
     {
-        var clientTelegram = new TelegramBotClient("5784604175:AAH_fx2f4pdGvuB5htzDC3ApR-asRQ-ph4I");
+        var clientTelegram = new TelegramBotClient("token");
         clientTelegram.StartReceiving(Update, Error);
 
         client = new DiscordSocketClient();
         client.MessageReceived += CommandsHandler;
         client.Log += Log;
 
-        var token = "MTAzMjE1NzQwMTM1ODU0OTAzNg.GJltnB.VwKwGq5KCr2NA49BQl4MCZoBCmf6QGP0pOvxNE";
+        var token = "token";
 
         await client.LoginAsync(TokenType.Bot, token);
         await client.StartAsync();
